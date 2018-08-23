@@ -1,0 +1,9 @@
+I denne fil findes der links, der er brugt i relation til projektet:
+
+1) https://www.tutorialspoint.com/csharp/csharp_operator_overloading.htm
+
+2) https://stackoverflow.com/questions/673721/overloading-and-overriding
+
+3) https://stackoverflow.com/questions/10790370/whats-wrong-with-defining-operator-but-not-defining-equals-or-gethashcode
+
+4) https://stackoverflow.com/questions/665299/are-2-dimensional-lists-possible-in-c 

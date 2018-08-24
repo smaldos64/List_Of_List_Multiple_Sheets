@@ -17,5 +17,8 @@ namespace List_Of_List_Multiple_Sheets
         public const int NoRowsInSpreadSheet = -1;
         public const int NoColumnsInSpreadSheet = -1;
         public const int NoSheetInSpreadSheet = -1;
+
+        public const int DefaulNumberOfRowsInSheet = 10;
+        public const int DefaultNumberOfColumnsInSheet = 10;
     }
 }

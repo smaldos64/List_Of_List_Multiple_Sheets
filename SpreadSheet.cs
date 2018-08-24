@@ -6,11 +6,23 @@ using System.Threading.Tasks;
 
 namespace List_Of_List_Multiple_Sheets
 {
+    public class SpreadSheetWithName
+    {
+        Point ThisPoint;
+        string SheetName;
+    }
+
     public class SpreadSheet
     {
         public List<List<Point>> SpreadSheetMatrix = new List<List<Point>>();
+        public string SheetNameInSpreadSheet;
 
         #region CheckRow_Column
+        public int GetNumberOfRowsInSpreadSheet()
+        {
+            return (SpreadSheetMatrix.Count);
+        }
+
         private bool CheckSpreadSheetRow_Column_Index(int SpreadSheetRow, int SpreadSheetColumn)
         {
             bool IndexIsWithinRange = false;
@@ -66,6 +78,16 @@ namespace List_Of_List_Multiple_Sheets
         public void AddRowToSpreadSheet()
         {
             SpreadSheetMatrix.Add(new List<Point>());
+        }
+
+        public void AddColumnToSpreadSheet()
+        {
+            for (int RowCounter = 0; RowCounter < GetNumberOfRowsInSpreadSheet(); RowCounter++)
+            {
+                Point Point_Object = new Point();
+
+                SpreadSheetMatrix[RowCounter].Add(Point_Object);
+            }
         }
 
         public void AddColumnToSpreadSheetRow(int SpreadSheetRow)
@@ -141,11 +163,6 @@ namespace List_Of_List_Multiple_Sheets
             }
         }
 
-        public int GetNumberOfRowsInSpreadSheet()
-        {
-            return (SpreadSheetMatrix.Count);
-        }
-
         public int GetNumberOfColumnsInSpreadSheetRow(int SpreadSheetRow)
         {
             if (SpreadSheetRow < SpreadSheetMatrix.Count)
@@ -172,6 +189,23 @@ namespace List_Of_List_Multiple_Sheets
                 }
             }
             return (MaxNumberOfColumnsInRow);
+        }
+        #endregion
+
+        #region ChangeValuesInSpreadSheet
+        public void ResetPointFromSpreadSheet(int SpreadSheetRow, int SpreadSheetColumn)
+        {
+            if (CheckSpreadSheetRow_Column_Index(SpreadSheetRow, SpreadSheetColumn))
+            {
+                SpreadSheetMatrix[SpreadSheetRow][SpreadSheetColumn].XCoordinate = 0;
+                SpreadSheetMatrix[SpreadSheetRow][SpreadSheetColumn].YCoordinate = 0;
+            }
+        }
+
+        public void InsertPointInSpreadSheet(int SpreadSheetRow, int SpreadSheetColumn,
+            double XCoordinate, double YCoordinate)
+        {
+
         }
         #endregion
 
@@ -221,5 +255,19 @@ namespace List_Of_List_Multiple_Sheets
         }
         #endregion
 
+        #region Static_Functions
+        public static void AddRowsAndColumsToSheetInSpreadSheet(SpreadSheet SpreadSheet_Object)
+        {
+            for (int RowCounter = 0; RowCounter < Const.DefaulNumberOfRowsInSheet; RowCounter++)
+            {
+                SpreadSheet_Object.AddRowToSpreadSheet();
+            }
+
+            for (int ColumnCounter = 0; ColumnCounter < Const.DefaultNumberOfColumnsInSheet; ColumnCounter++)
+            {
+                SpreadSheet_Object.AddColumnToSpreadSheet();
+            }
+        }
+        #endregion
     }
 }

@@ -26,6 +26,14 @@ namespace List_Of_List_Multiple_Sheets
             }
         }
 
+        public static void AddColumnToSpreadSheet()
+        {
+            if (IsThereAnySheetsInSpreadSheet())
+            {
+                Program.SpreadSheet_ObjectList[Program.SheetNumber].AddColumnToSpreadSheet();
+            }
+        }
+
         private static int GetSpreadSheetSheetNumber(string InputString)
         {
             int NumberOfSheetsInSpreadSheet = Program.SpreadSheet_ObjectList.Count;
@@ -76,37 +84,48 @@ namespace List_Of_List_Multiple_Sheets
             return (CurrentRowNumber);
         }
 
-        private static int GetSpreadSheetColumnNumber(string InputString, MATRIX_COLUMN_OPERATION_ENUM ColumnOption, int RowNumber = - 1)
+        private static int GetSpreadSheetColumnNumber(string InputString)
         {
-            int MaxNumberOfColumnsAllowable;
-            
-            if (MATRIX_COLUMN_OPERATION_ENUM.SEARCH_ALL_ROWS == ColumnOption)
-            {
-                MaxNumberOfColumnsAllowable = Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows();
-            }
-            else
-            {
-                MaxNumberOfColumnsAllowable = Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(RowNumber);
-            }
-            
-            int CurrentColumnNumber = 0;
+            //int MaxNumberOfColumnsAllowable;
 
-            if (MaxNumberOfColumnsAllowable > 0)
+            //if (MATRIX_COLUMN_OPERATION_ENUM.SEARCH_ALL_ROWS == ColumnOption)
+            //{
+            //    MaxNumberOfColumnsAllowable = Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows();
+            //}
+            //else
+            //{
+            //    MaxNumberOfColumnsAllowable = Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(RowNumber);
+            //}
+
+            //int CurrentColumnNumber = 0;
+
+            //if (MaxNumberOfColumnsAllowable > 0)
+            //{
+            //    ToolsScreen.MakeEmptyLines(2);
+            //    do
+            //    {
+            //        ToolsInput.GetUserInput(out CurrentColumnNumber, InputString);
+            //        if (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < MaxNumberOfColumnsAllowable)))
+            //        {
+            //            ToolsScreen.ClearLine();
+            //        }
+            //    } while (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < MaxNumberOfColumnsAllowable)));
+            //}
+            //else
+            //{
+            //    CurrentColumnNumber = Const.NoColumnsInSpreadSheet;
+            //}
+            int CurrentColumnNumber;
+
+            ToolsScreen.MakeEmptyLines(2);
+            do
             {
-                ToolsScreen.MakeEmptyLines(2);
-                do
+                ToolsInput.GetUserInput(out CurrentColumnNumber, InputString);
+                if (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows())))
                 {
-                    ToolsInput.GetUserInput(out CurrentColumnNumber, InputString);
-                    if (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < MaxNumberOfColumnsAllowable)))
-                    {
-                        ToolsScreen.ClearLine();
-                    }
-                } while (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < MaxNumberOfColumnsAllowable)));
-            }
-            else
-            {
-                CurrentColumnNumber = Const.NoColumnsInSpreadSheet;
-            }
+                    ToolsScreen.ClearLine();
+                }
+            } while (!((CurrentColumnNumber >= 0) && (CurrentColumnNumber < Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows())));
 
             return (CurrentColumnNumber);
         }
@@ -132,20 +151,66 @@ namespace List_Of_List_Multiple_Sheets
             }
         }
 
-        public static void RemovePointFromSpredSheet()
+        public static void GetRowAndColumnNumber(ref int RowNumber, ref int ColumnNumber, string RowText, string ColumnText)
         {
-            int CurrentRowNumber;
-            int CurrentColumnNumber;
+            int CurrentRowNumber = -1;
+            int CurrentColumnNumber = -1;
 
-            CurrentRowNumber = GetSpreadSheetRowNumber("Indtast række nummer der skal have punkt slettet  (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfRowsInSpreadSheet() - 1) + ") : ");
+            CurrentRowNumber = GetSpreadSheetRowNumber(RowText);
             if (CurrentRowNumber >= 0)
             {
-                CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal punkt slettet (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(CurrentRowNumber) - 1) + ") : ", MATRIX_COLUMN_OPERATION_ENUM.SEARCH_CURRENT_ROW, CurrentRowNumber);
-                if (CurrentColumnNumber >= 0)
-                {
-                    Program.SpreadSheet_ObjectList[Program.SheetNumber].RemovePointFromSpreadSheet(CurrentRowNumber, CurrentColumnNumber);
-                }
+                CurrentColumnNumber = GetSpreadSheetColumnNumber(ColumnText);
             }
+        }
+
+        public static void RemovePointFromSpredSheet()
+        {
+            int CurrentRowNumber = -1;
+            int CurrentColumnNumber = -1;
+
+            GetRowAndColumnNumber(ref CurrentRowNumber, ref CurrentColumnNumber,
+                "Indtast række nummer der skal have punkt slettet  (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfRowsInSpreadSheet() - 1) + ") : ",
+                "Indtast søjle nummer der skal punkt slettet (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(CurrentRowNumber) - 1) + ") : ");
+
+            if ((CurrentRowNumber >= 0) && (CurrentColumnNumber >= 0))
+            {
+                Program.SpreadSheet_ObjectList[Program.SheetNumber].RemovePointFromSpreadSheet(CurrentRowNumber, CurrentColumnNumber);
+            }
+
+            //CurrentRowNumber = GetSpreadSheetRowNumber("Indtast række nummer der skal have punkt slettet  (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfRowsInSpreadSheet() - 1) + ") : ");
+            //if (CurrentRowNumber >= 0)
+            //{
+            //    CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal punkt slettet (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(CurrentRowNumber) - 1) + ") : ");
+            //    if (CurrentColumnNumber >= 0)
+            //    {
+            //        Program.SpreadSheet_ObjectList[Program.SheetNumber].RemovePointFromSpreadSheet(CurrentRowNumber, CurrentColumnNumber);
+            //    }
+            //}
+        }
+
+        public static void ResetPointFromSpreadSheet()
+        {
+            int CurrentRowNumber = -1;
+            int CurrentColumnNumber = -1;
+
+            GetRowAndColumnNumber(ref CurrentRowNumber, ref CurrentColumnNumber,
+                "Indtast række nummer der skal have punkt nulstillet  (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfRowsInSpreadSheet() - 1) + ") : ",
+                "Indtast søjle nummer der skal punkt nulstillet (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetNumberOfColumnsInSpreadSheetRow(CurrentRowNumber) - 1) + ") : ");
+
+            if ((CurrentRowNumber >= 0) && (CurrentColumnNumber >= 0))
+            {
+                Program.SpreadSheet_ObjectList[Program.SheetNumber].ResetPointFromSpreadSheet(CurrentRowNumber, CurrentColumnNumber);
+            }
+        }
+
+        public static void InsertPointInSpreadSheet()
+        {
+
+        }
+
+        public static void ChangePointFromSpreadSheet()
+        {
+
         }
 
         public static void RemoveRowFromSpreadSheet()
@@ -163,7 +228,7 @@ namespace List_Of_List_Multiple_Sheets
         {
             int CurrentColumnNumber;
 
-            CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal slettes (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows() - 1) + ") : ", MATRIX_COLUMN_OPERATION_ENUM.SEARCH_ALL_ROWS);
+            CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal slettes (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows() - 1) + ") : ");
             if (CurrentColumnNumber >= 0)
             {
                 Program.SpreadSheet_ObjectList[Program.SheetNumber].RemoveColumnFromSpreadSheet(CurrentColumnNumber);
@@ -187,7 +252,7 @@ namespace List_Of_List_Multiple_Sheets
         {
             int CurrentColumnNumber;
 
-            CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal udskrives (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows() - 1) + ") : ", MATRIX_COLUMN_OPERATION_ENUM.SEARCH_ALL_ROWS);
+            CurrentColumnNumber = GetSpreadSheetColumnNumber("Indtast søjle nummer der skal udskrives (0 - " + (Program.SpreadSheet_ObjectList[Program.SheetNumber].GetMaxNumberOfColumnsInRows() - 1) + ") : ");
             if (CurrentColumnNumber >= 0)
             {
                 Program.SpreadSheet_ObjectList[Program.SheetNumber].PrintAllRowsWithinSpreadSheetColumn(CurrentColumnNumber);
@@ -201,24 +266,46 @@ namespace List_Of_List_Multiple_Sheets
             ToolsInput.WaitForUser();
         }
 
-        public static void AddSheetToSpreadSheet()
+        public static void AddSheetToSpreadSheet(bool init = false)
         {
             SpreadSheet SpreadSheetObject = new SpreadSheet();
 
             Program.SpreadSheet_ObjectList.Add(SpreadSheetObject);
+            SpreadSheet.AddRowsAndColumsToSheetInSpreadSheet(SpreadSheetObject);
+            
+            if (!init)
+            {
+                ToolsInput.GetUserInput(out Program.SpreadSheet_ObjectList[Program.SpreadSheet_ObjectList.Count - 1].SheetNameInSpreadSheet, "Indtast ønsket navn for Sheet " + (Program.SpreadSheet_ObjectList.Count - 1) + " : ");
+            }
+            else
+            {
+                Program.SpreadSheet_ObjectList[Program.SpreadSheet_ObjectList.Count - 1].SheetNameInSpreadSheet = "Sheet1";
+            }
+        }
+
+        public static void RemoveSheetFromSpreadSheet()
+        {
+            int CurrentSheetNumber;
+
+            CurrentSheetNumber = GetSpreadSheetSheetNumber("Indtast Sheet nummer der skal slettes  (0 - " + (GetNumberOfSheetsInSpreadSheet() - 1) + ") : ");
+            if (CurrentSheetNumber >= 0)
+            {
+                Program.SpreadSheet_ObjectList.RemoveAt(CurrentSheetNumber);
+            }
+        }
+
+        public static void RenameSheetNameInSpreadSheet()
+        {
+            ToolsScreen.MakeEmptyLines(1);
+            ToolsInput.GetUserInput(out Program.SpreadSheet_ObjectList[Program.SheetNumber].SheetNameInSpreadSheet, "Indtast nyt ønsket navn for Sheet " + Program.SheetNumber + " " + Program.SpreadSheet_ObjectList[Program.SheetNumber].SheetNameInSpreadSheet + " : ");
         }
 
         public static int SelectSheetInSpreadSheet()
         {
             int CurrentSheetNumber;
-
-
+            
             CurrentSheetNumber = GetSpreadSheetSheetNumber("Indtast Sheet nummer der skal arbejdes på (0 - " + (GetNumberOfSheetsInSpreadSheet() - 1) + ") : ");
-            //if (CurrentSheetNumber >= 0)
-            //{
-            //    Program.SpreadSheet_ObjectList[Program.SheetNumber].PrintAllRowsWithinSpreadSheetColumn(CurrentColumnNumber);
-            //    ToolsInput.WaitForUser();
-            //}
+            
             return (CurrentSheetNumber);
         }
     }

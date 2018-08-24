@@ -44,11 +44,11 @@ namespace List_Of_List_Multiple_Sheets
             do
             {
                 ToolsInput.GetUserInput(out KeypressedValue, "Indtast dit valg (1 - " + StringListHere.Length + ") : ");
-                if (!((KeypressedValue >= 0) && (KeypressedValue < StringListHere.Count())))
+                if (!((KeypressedValue > 1) && (KeypressedValue <= StringListHere.Count())))
                 {
                     ToolsScreen.ClearLine();
                 }
-            } while ( !( (KeypressedValue >= 0) && (KeypressedValue < StringListHere.Count())) );
+            } while ( !( (KeypressedValue > 0) && (KeypressedValue <= StringListHere.Count())) );
 
             return (KeypressedValue);
         }

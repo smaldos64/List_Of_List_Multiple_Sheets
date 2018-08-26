@@ -24,7 +24,7 @@ namespace List_Of_List_Multiple_Sheets
             if (Const.NoSheetInSpreadSheet != SheetNumber)
             {
                 ToolsOutput.PrintStringOnSeperateLine("Antal Sheet i Regneark       : " + HandleSpreadSheet.GetNumberOfSheetsInSpreadSheet());
-                ToolsOutput.PrintStringOnSameLine("Sheet : ");
+                ToolsOutput.PrintStringOnSameLine("Sheets : ");
                 for (int SheetCounter = 0; SheetCounter < HandleSpreadSheet.GetNumberOfSheetsInSpreadSheet(); SheetCounter++)
                 {
                     ToolsOutput.PrintStringOnSameLine(SheetCounter + " (" + SpreadSheet_ObjectList[SheetCounter].SheetNameInSpreadSheet + ")");
@@ -34,7 +34,7 @@ namespace List_Of_List_Multiple_Sheets
                     }
                 }
                 ToolsOutput.PrintStringOnSeperateLine("");
-                ToolsOutput.PrintStringOnSeperateLine("Aktiv Sheet nummer i Regneark       : " + SheetNumber);
+                ToolsOutput.PrintStringOnSeperateLine("Aktiv Sheet i Regneark       : " + SheetNumber + " (" + SpreadSheet_ObjectList[SheetNumber].SheetNameInSpreadSheet + ")");
                 ToolsOutput.PrintStringOnSeperateLine("Antal rækker i Sheet " + SheetNumber + " : " + SpreadSheet_ObjectList[SheetNumber].GetNumberOfRowsInSpreadSheet());
                 ToolsOutput.PrintStringOnSeperateLine("Max søjler i række i sheet " + SheetNumber + " : " + SpreadSheet_ObjectList[SheetNumber].GetMaxNumberOfColumnsInRows());
                 ToolsOutput.PrintStringOnSeperateLine("---------------------------------");
@@ -45,7 +45,7 @@ namespace List_Of_List_Multiple_Sheets
         public static void MainMenu()
         {
             string[] StringList = { "1 : Håndter Points i Sheet i Regneark",
-                                    "2 : Udskriv Points i Sheet i Regneark",
+                                    "2 : Beregninger på Points i Sheet i Regneark",
                                     "3 : Håndter Sheets i Regneark",
                                     "4 : Afslut program !!!"};
 
@@ -65,7 +65,7 @@ namespace List_Of_List_Multiple_Sheets
                         break;
 
                     case 2:
-                        PrintMenu();
+                        CalculateMenu();
                         break;
 
                     case 3:
@@ -79,14 +79,12 @@ namespace List_Of_List_Multiple_Sheets
         {
             string[] StringList = { "1 : Slet Point i Sheet række-søjle i Regneark",
                                     "2 : Nulstil Point i Sheet række-søjle i Regneark",
-                                    "3 : Indtast Point værdi før Sheet række-søjle i Regneark",
-                                    "4 : Ret Point værdi i Sheet række-søjle i Regneark",
-                                    "5 : Adder Point værdi i Sheet række-søjle i Regneark",
-                                    "6 : Slet række i Sheet i Regneark",
-                                    "7 : Slet søjle i Sheet i Regneark",
-                                    "8 : Indsæt række i Sheet i Regneark",
-                                    "9 : Indsæt søjle i Sheet i Regneark",
-                                    "10 : Tilbage !!!"};
+                                    "3 : Ret Point værdi i Sheet række-søjle i Regneark",
+                                    "4 : Slet række i Sheet i Regneark",
+                                    "5 : Slet søjle i Sheet i Regneark",
+                                    "6 : Indsæt række i Sheet i Regneark",
+                                    "7 : Indsæt søjle i Sheet i Regneark",
+                                    "8 : Tilbage !!!"};
 
             int KeypressedValue = 0;
 
@@ -105,31 +103,23 @@ namespace List_Of_List_Multiple_Sheets
                         HandleSpreadSheet.ResetPointFromSpreadSheet();
                         break;
 
-                    case 3:
-                        HandleSpreadSheet.InsertPointInSpreadSheet();
-                        break;
-
-                    case 4:
+                   case 3:
                         HandleSpreadSheet.ChangePointFromSpreadSheet();
                         break;
 
-                    case 5:
-                        HandleSpreadSheet.AddPointToRowInSpreadSheet();
-                        break;
-
-                    case 6:
+                   case 4:
                         HandleSpreadSheet.RemoveRowFromSpreadSheet();
                         break;
 
-                    case 7:
+                    case 5:
                         HandleSpreadSheet.RemoveColumnFromSpreadSheet();
                         break;
 
-                    case 8:
+                    case 6:
                         HandleSpreadSheet.AddRowToSpreadSheet();
                         break;
 
-                    case 9:
+                    case 7:
                         HandleSpreadSheet.AddColumnToSpreadSheet();
                         break;
                 }
@@ -194,6 +184,41 @@ namespace List_Of_List_Multiple_Sheets
 
                     case 3:
                         HandleSpreadSheet.RenameSheetNameInSpreadSheet();
+                        break;
+
+                    case 4:
+                        SheetNumber = HandleSpreadSheet.SelectSheetInSpreadSheet();
+                        break;
+                }
+            } while (KeypressedValue < StringList.Length);
+        }
+
+        public static void CalculateMenu()
+        {
+            string[] StringList = { "1 : Adder punkter i Række",
+                                    "2 : Adder punkter i Kolonne",
+                                    "3 : Adder alle punkter i Sheet i Regneark",
+                                    "4 : Tilbage !!!"};
+
+            int KeypressedValue = 0;
+
+            do
+            {
+                PrintTopOfScreen(SheetNumber);
+                KeypressedValue = ToolsMenu.MakeMenu(StringList);
+
+                switch (KeypressedValue)
+                {
+                    case 1:
+                        HandleSpreadSheet.AddPointsInRow();
+                        break;
+
+                    case 2:
+                        HandleSpreadSheet.AddPointsInColumn();
+                        break;
+
+                    case 3:
+                        HandleSpreadSheet.AddPointsInSheet();
                         break;
                 }
             } while (KeypressedValue < StringList.Length);

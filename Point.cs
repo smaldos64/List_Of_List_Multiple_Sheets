@@ -105,7 +105,7 @@ namespace List_Of_List_Multiple_Sheets
         // vi bruger f.eks. Console.WriteLine på et objekct af klassen Point.
         public override string ToString()
         {
-            return ("(" + this.XCoordinate.ToString() + ";" + this.YCoordinate.ToString() + ")");
+            return ("(" + this.XCoordinate.ToString() + "; " + this.YCoordinate.ToString() + ")");
         }
     }
 }

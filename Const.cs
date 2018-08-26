@@ -20,5 +20,9 @@ namespace List_Of_List_Multiple_Sheets
 
         public const int DefaulNumberOfRowsInSheet = 10;
         public const int DefaultNumberOfColumnsInSheet = 10;
+
+        public const string DefaultNameForFirstSheet = "Sheet0";
+
+        public static Point DefaultPointValue_Object = new Point(0, 0);
     }
 }

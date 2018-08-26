@@ -26,6 +26,7 @@ namespace List_Of_List_Multiple_Sheets
             {
                 ToolsOutput.PrintStringOnSeperateLine(Item);
             }
+            HandleSpreadSheet.PrintPointsInSpreadSheet();
             KeypressedValueChar = ToolsInput.GetKeyPress("Indtast dit valg (1 - " + StringListHere.Length + ") : ", ValidCharArray, false);
             KeypressedValue = KeypressedValueChar.ParseInt32();
            
@@ -40,6 +41,7 @@ namespace List_Of_List_Multiple_Sheets
             {
                 ToolsOutput.PrintStringOnSeperateLine(Item);
             }
+            HandleSpreadSheet.PrintPointsInSpreadSheet();
 
             do
             {

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace List_Of_List_Multiple_Sheets
 {
-    public class SpreadSheetWithName
-    {
-        Point ThisPoint;
-        string SheetName;
-    }
+    //public class SpreadSheetWithName
+    //{
+    //    Point ThisPoint;
+    //    string SheetName;
+    //}
 
     public class SpreadSheet
     {
@@ -21,6 +21,18 @@ namespace List_Of_List_Multiple_Sheets
         public int GetNumberOfRowsInSpreadSheet()
         {
             return (SpreadSheetMatrix.Count);
+        }
+
+        public int GetNumberOfColumnsInSpreadSheet()
+        {
+            if (GetNumberOfRowsInSpreadSheet() > 0)
+            {
+                return (SpreadSheetMatrix[0].Count);
+            }
+            else
+            {
+                return (-1);
+            }
         }
 
         private bool CheckSpreadSheetRow_Column_Index(int SpreadSheetRow, int SpreadSheetColumn)
@@ -75,18 +87,60 @@ namespace List_Of_List_Multiple_Sheets
         #endregion
 
         #region AddToSpreadSheet
-        public void AddRowToSpreadSheet()
+        public void AddRowToSpreadSheet(int RowNumber = -1)
         {
-            SpreadSheetMatrix.Add(new List<Point>());
+            if (-1 == RowNumber)
+            {
+                SpreadSheetMatrix.Add(new List<Point>());
+            }
+            else
+            {
+                SpreadSheetMatrix.Insert(RowNumber, new List<Point>());
+            }
+            
         }
 
-        public void AddColumnToSpreadSheet()
+        public void InsertRowInSpreadSheet(int RowNumber = -1)
         {
-            for (int RowCounter = 0; RowCounter < GetNumberOfRowsInSpreadSheet(); RowCounter++)
+            if (-1 == RowNumber)
             {
-                Point Point_Object = new Point();
+                AddRowToSpreadSheet();
 
-                SpreadSheetMatrix[RowCounter].Add(Point_Object);
+                for (int ColumnCounter = 0; ColumnCounter < GetMaxNumberOfColumnsInRows(); ColumnCounter++)
+                {
+                    AddColumnToSpreadSheet();
+                }
+            }
+            else
+            {
+                AddRowToSpreadSheet(RowNumber);
+
+                for (int ColumnCounter = 0; ColumnCounter < GetMaxNumberOfColumnsInRows(); ColumnCounter++)
+                {
+                    AddPointValueToSpreadSheetRow(RowNumber, Const.DefaultPointValue_Object);
+                }
+            }
+        }
+
+        public void AddColumnToSpreadSheet(int ColumnNumber = -1)
+        {
+            if (-1 == ColumnNumber)
+            {
+                for (int RowCounter = 0; RowCounter < GetNumberOfRowsInSpreadSheet(); RowCounter++)
+                {
+                    Point Point_Object = new Point();
+
+                    SpreadSheetMatrix[RowCounter].Add(Point_Object);
+                }
+            }
+            else
+            {
+                for (int RowCounter = 0; RowCounter < GetNumberOfRowsInSpreadSheet(); RowCounter++)
+                {
+                    Point Point_Object = new Point();
+
+                    SpreadSheetMatrix[RowCounter].Insert(ColumnNumber, Point_Object);
+                }
             }
         }
 
@@ -202,10 +256,14 @@ namespace List_Of_List_Multiple_Sheets
             }
         }
 
-        public void InsertPointInSpreadSheet(int SpreadSheetRow, int SpreadSheetColumn,
+        public void ChangePointInSpreadSheet(int SpreadSheetRow, int SpreadSheetColumn,
             double XCoordinate, double YCoordinate)
         {
-
+            if (CheckSpreadSheetRow_Column_Index(SpreadSheetRow, SpreadSheetColumn))
+            {
+                SpreadSheetMatrix[SpreadSheetRow][SpreadSheetColumn].XCoordinate = XCoordinate;
+                SpreadSheetMatrix[SpreadSheetRow][SpreadSheetColumn].YCoordinate = YCoordinate;
+            }
         }
         #endregion
 
@@ -252,6 +310,47 @@ namespace List_Of_List_Multiple_Sheets
                 }
                 ToolsScreen.MakeEmptyLines(1);
             }
+        }
+        #endregion
+
+        #region AddValuesInSpreadSheet
+        public void AddAllColumnsWithinSpreadSheetRow(int SpreadSheetRow)
+        {
+            Point AddPoint_Object = new Point(Const.DefaultPointValue_Object.XCoordinate, Const.DefaultPointValue_Object.YCoordinate);
+            ToolsScreen.MakeEmptyLines(1);
+            for (int ColumnCounter = 0; ColumnCounter < SpreadSheetMatrix[SpreadSheetRow].Count; ColumnCounter++)
+            {
+                AddPoint_Object += SpreadSheetMatrix[SpreadSheetRow][ColumnCounter];
+            }
+            ToolsScreen.MakeEmptyLines(1);
+            ToolsOutput.PrintStringOnSameLine("Summen af alle punkter i række " + SpreadSheetRow + " er : " + AddPoint_Object);
+        }
+
+        public void AddAllRowsWithinSpreadSheetColumn(int SpreadSheetColumn)
+        {
+            Point AddPoint_Object = new Point(Const.DefaultPointValue_Object.XCoordinate, Const.DefaultPointValue_Object.YCoordinate);
+            ToolsScreen.MakeEmptyLines(1);
+            for (int RowCounter = 0; RowCounter < SpreadSheetMatrix.Count; RowCounter++)
+            {
+                AddPoint_Object += SpreadSheetMatrix[RowCounter][SpreadSheetColumn];
+            }
+            ToolsScreen.MakeEmptyLines(1);
+            ToolsOutput.PrintStringOnSameLine("Summen af alle punkter i søjle " + SpreadSheetColumn + " er : " + AddPoint_Object);
+        }
+
+        public void AddAllPointsWithinSheet()
+        {
+            Point AddPoint_Object = new Point(Const.DefaultPointValue_Object.XCoordinate, Const.DefaultPointValue_Object.YCoordinate);
+            ToolsScreen.MakeEmptyLines(1);
+            for (int RowCounter = 0; RowCounter < SpreadSheetMatrix.Count; RowCounter++)
+            {
+                for (int ColumnCounter = 0; ColumnCounter < GetMaxNumberOfColumnsInRows(); ColumnCounter++)
+                {
+                    AddPoint_Object += SpreadSheetMatrix[RowCounter][ColumnCounter];
+                }
+            }
+            ToolsScreen.MakeEmptyLines(1);
+            ToolsOutput.PrintStringOnSameLine("Summen af alle punkter i sheet " + Program.SheetNumber + " er : " + AddPoint_Object);
         }
         #endregion
 
